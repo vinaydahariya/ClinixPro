@@ -1,0 +1,415 @@
+services:
+  # Eureka Server
+  eurekaserver:
+    image: dahariyavinay/eureka-server:v1
+    container_name: eurekaserver
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8761/actuator/health/readiness || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  # User Service (MySQL)
+  user-service:
+    image: dahariyavinay/user-service:v1
+    container_name: user-service
+    ports:
+      - "1010:1010"
+    depends_on:
+      - mysql-db
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:1010/actuator/health/readiness || exit 1"]
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_APPLICATION_NAME: user-service
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  # Clinic Service (PostgreSQL)
+  clinic-service:
+    image: dahariyavinay/clinic-service:v1
+    container_name: clinic-service
+    ports:
+      - "1011:1011"
+    depends_on:
+      - postgres-clinic
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:1011/actuator/health/readiness || exit 1"]
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-clinic:5432/${POSTGRES_DB_PREFIX}clinic_db
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_APPLICATION_NAME: clinic-service
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  # Category Service (MongoDB)
+  category-service:
+    image: dahariyavinay/category-service:v1
+    container_name: category-service
+    ports:
+      - "1012:1012"
+    depends_on:
+      - mongodb
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:1012/actuator/health/readiness || exit 1"]
+    env_file:
+      - .env
+    environment:
+      SPRING_APPLICATION_NAME: category-service
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  # Service Offering Service (H2)
+  service-offering-service:
+    image: dahariyavinay/service-offering-service:v1
+    container_name: service-offering-service
+    ports:
+      - "1013:1013"
+    depends_on:
+      - h2-db
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:1013/actuator/health/readiness || exit 1"]
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:tcp://h2-db:1521/${H2_DATABASE}
+      SPRING_DATASOURCE_USERNAME: ${H2_USER}
+      SPRING_DATASOURCE_PASSWORD: ${H2_PASSWORD}
+      SPRING_APPLICATION_NAME: service-offering-service
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  # Booking Service (PostgreSQL)
+  booking-service:
+    image: dahariyavinay/booking-service:v1
+    container_name: booking-service
+    ports:
+      - "1014:1014"
+    depends_on:
+      - postgres-booking
+      - rabbitmq
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:1014/actuator/health/readiness || exit 1"]
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-booking:5432/${POSTGRES_DB_PREFIX}booking_db
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_APPLICATION_NAME: booking-service
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  # Payment Service (PostgreSQL)
+  payment-service:
+    image: dahariyavinay/payment-service:v1
+    container_name: payment-service
+    ports:
+      - "1015:1015"
+    depends_on:
+      - postgres-payment
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:1015/actuator/health/readiness || exit 1"]
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-payment:5432/${POSTGRES_DB_PREFIX}payment_db
+      SPRING_APPLICATION_NAME: payment-service
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  # Notification Service (PostgreSQL)
+  notification-service:
+    image: dahariyavinay/notification-service:v1
+    container_name: notification-service
+    ports:
+      - "1017:1017"
+    depends_on:
+      - postgres-notification
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:1017/actuator/health/readiness || exit 1"]
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-notification:5432/${POSTGRES_DB_PREFIX}notification_db
+      SPRING_APPLICATION_NAME: notification-service
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  # Review Service (PostgreSQL)
+  review-service:
+    image: dahariyavinay/review-service:v1
+    container_name: review-service
+    ports:
+      - "1018:1018"
+    depends_on:
+      - postgres-review
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:1018/actuator/health/readiness || exit 1"]
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-review:5432/${POSTGRES_DB_PREFIX}review_db
+      SPRING_APPLICATION_NAME: review-service
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  # Gateway Server
+  gateway-server:
+    image: dahariyavinay/gateway-server:v1
+    container_name: gateway-server
+    ports:
+      - "1016:1016"
+    depends_on:
+      - eurekaserver
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:1016/actuator/health/readiness || exit 1"]
+    env_file:
+      - .env
+    environment:
+      SPRING_APPLICATION_NAME: gateway-server
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  # Database Services
+  mysql-db:
+    image: mysql:8
+    container_name: mysql-db
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - clinixpro
+
+  postgres-clinic:
+    image: postgres:13
+    container_name: postgres-clinic
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_PREFIX}clinic_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-clinic-data:/var/lib/postgresql/data
+    networks:
+      - clinixpro
+
+  postgres-booking:
+    image: postgres:13
+    container_name: postgres-booking
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_PREFIX}booking_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres-booking-data:/var/lib/postgresql/data
+    networks:
+      - clinixpro
+
+  postgres-payment:
+    image: postgres:13
+    container_name: postgres-payment
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_PREFIX}payment_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres-payment-data:/var/lib/postgresql/data
+    networks:
+      - clinixpro
+
+  postgres-notification:
+    image: postgres:13
+    container_name: postgres-notification
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_PREFIX}notification_db
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres-notification-data:/var/lib/postgresql/data
+    networks:
+      - clinixpro
+
+  postgres-review:
+    image: postgres:13
+    container_name: postgres-review
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_PREFIX}review_db
+    ports:
+      - "5437:5432"
+    volumes:
+      - postgres-review-data:/var/lib/postgresql/data
+    networks:
+      - clinixpro
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - clinixpro
+
+  h2-db:
+    image: oscarfonts/h2
+    container_name: h2-db
+    env_file:
+      - .env
+    ports:
+      - "2023:81"
+      - "1521:1521"
+    volumes:
+      - h2-data:/opt/h2-data
+    networks:
+      - clinixpro
+
+  # Admin Interfaces
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql-db
+    ports:
+      - "2021:80"
+    depends_on:
+      - mysql-db
+    networks:
+      - clinixpro
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    env_file:
+      - .env
+    ports:
+      - "2020:80"
+    depends_on:
+      - postgres-clinic
+    networks:
+      - clinixpro
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    env_file:
+      - .env
+    ports:
+      - "2022:8081"
+    depends_on:
+      - mongodb
+    networks:
+      - clinixpro
+
+  # Keycloak
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.3
+    container_name: keycloak
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    command: ["start-dev"]
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    env_file:
+      - .env
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+networks:
+  clinixpro:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  postgres-clinic-data:
+  postgres-booking-data:
+  postgres-payment-data:
+  postgres-notification-data:
+  postgres-review-data:
+  mongo-data:
+  h2-data:
+  rabbitmq_data:
