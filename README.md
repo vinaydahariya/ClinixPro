@@ -5,6 +5,16 @@ It enables patients to seamlessly book appointments, clinics to manage their ser
 
 ---
 
+## 📌 Project Status
+🚧 **Under Active Development** — This project is not yet 100% complete and is expected to be **fully completed by August 31, 2025**.  
+
+Upcoming planned features include:
+- 🔄 **Automatic Refund Payment** system
+- 💻 **Online Doctor–Patient Meeting** (video consultation)  
+- ⚡ Additional minor enhancements and optimizations
+
+---
+
 ## 🚀 Features
 
 - 🏥 **Multi-Clinic & Doctor Management**
@@ -22,7 +32,6 @@ It enables patients to seamlessly book appointments, clinics to manage their ser
 
 ## 🏗 Microservices Architecture
 
-### **Services**
 | Service Name                | Database       | Description |
 |-----------------------------|---------------|-------------|
 | **user-service**            | MySQL          | Handles user profiles, roles, and authentication integration with Keycloak |
@@ -76,7 +85,3 @@ All dependencies are containerized for seamless local & production deployment:
 **DevOps:** Docker, Docker Compose  
 **Service Discovery:** Eureka Server  
 **API Gateway:** Spring Cloud Gateway
-
----
-
-
