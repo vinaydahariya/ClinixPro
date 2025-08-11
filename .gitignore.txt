@@ -1,0 +1,20 @@
+# Backend
+/target
+*.log
+*.class
+
+# Frontend
+/node_modules
+/.next
+/dist
+
+# Docker
+*.pid
+*.tar
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Env
+.env

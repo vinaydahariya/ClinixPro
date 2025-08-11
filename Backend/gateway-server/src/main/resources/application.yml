@@ -1,0 +1,120 @@
+server:
+  port: ${SERVER_PORT}
+
+spring:
+  application:
+    name: ${SPRING_APPLICATION_NAME}
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+          routes:
+            - id: user-service
+              uri: lb://user-service
+              predicates:
+                - Path=/auth/**, /api/admin/users/**, /api/users/**, /users/**
+
+            - id: clinic-service
+              uri: lb://clinic-service
+              predicates:
+                - Path=/clinics/**, /api/clinics/**, /api/admin/clinics/**
+
+            - id: category-service
+              uri: lb://category-service
+              predicates:
+                - Path=/api/categories/**
+
+            - id: service-offering-service
+              uri: lb://service-offering-service
+              predicates:
+                - Path=/api/service-offering/**
+
+            - id: booking-service
+              uri: lb://booking-service
+              predicates:
+                - Path=/api/bookings/**
+
+            - id: payment-service
+              uri: lb://payment-service
+              predicates:
+                - Path=/api/payments/**
+
+            - id: notification-service
+              uri: lb:ws://notification-service
+              predicates:
+                - Path=/api/notifications/**
+
+            - id: review-service
+              uri: lb://review-service
+              predicates:
+                - Path=/api/reviews/**
+
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - ${ALLOWED_ORIGIN_1}
+                  - ${ALLOWED_ORIGIN_2}
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders:
+                  - "*"
+                allowCredentials: true
+
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin RETAIN_FIRST
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    shutdown:
+      access: read_only
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+info:
+  app:
+    name: "Gateway Server"
+    description: "API Gateway Server for ClinixPro Microservices Architecture"
+    version: "1.0.0"
