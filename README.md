@@ -6,12 +6,12 @@ It enables patients to seamlessly book appointments, clinics to manage their ser
 ---
 
 ## 📌 Project Status
-🚧 **Under Active Development** — This project is not yet 100% complete and is expected to be **fully completed by August 31, 2025**.  
+🚧 **Under Active Development** — This project is not yet 100% complete and is expected to be **fully completed by September 31, 2025**.  
 
 Upcoming planned features include:
 - 🔄 **Automatic Refund Payment** system
 - 💻 **Online Doctor–Patient Meeting** (video consultation)  
-- ⚡ Additional minor enhancements and optimizations
+- ⚡ Additional minor enhancements and optimizations like config server, Distributes docker containers, Run Containers with the help of K8s(Kubernates) etc..
 
 ---
 
