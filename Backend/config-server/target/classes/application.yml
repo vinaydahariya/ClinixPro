@@ -1,0 +1,29 @@
+server:
+  port: 1019
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/vinaydahariya/clinixpro-config
+          default-label: main
+          clone-on-start: true
+          force-pull: true
+          # agar private repo hai:
+          username: ${GITHUB_USERNAME}
+          password: ${GITHUB_TOKEN}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+
+info:
+  app:
+    name: "Config Server"
+    description: "Config Server API For Clinic Booking System"
+    version: "1.0.0"
