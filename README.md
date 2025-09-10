@@ -44,6 +44,7 @@ Upcoming planned features include:
 | **review-service**          | PostgreSQL     | Stores clinic and doctor reviews & ratings |
 | **eureka-server**           | —              | Service discovery |
 | **gateway-server**          | —              | API Gateway for routing and security |
+| **config-server**          | —              | Config Server for fetching application.yml from github |
 
 ---
 
