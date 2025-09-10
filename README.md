@@ -6,7 +6,7 @@ It enables patients to seamlessly book appointments, clinics to manage their ser
 ---
 
 ## 📌 Project Status
-🚧 **Under Active Development** — This project is not yet 100% complete and is expected to be **fully completed by September 31, 2025**.  
+🚧 **Under Active Development** 
 
 Upcoming planned features include:
 - 🔄 **Automatic Refund Payment** system
