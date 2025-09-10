@@ -11,7 +11,7 @@ It enables patients to seamlessly book appointments, clinics to manage their ser
 Upcoming planned features include:
 - 🔄 **Automatic Refund Payment** system
 - 💻 **Online Doctor–Patient Meeting** (video consultation)  
-- ⚡ Additional minor enhancements and optimizations like config server, distributes docker containers, Run Containers with the help of K8s(Kubernates) etc..
+- ⚡ Additional minor enhancements and optimizations like distributes docker containers, Run Containers with the help of K8s(Kubernates) etc..
 
 ---
 
