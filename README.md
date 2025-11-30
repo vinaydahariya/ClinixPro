@@ -72,8 +72,8 @@ Upcoming planned features include:
 - **Keycloak** for centralized authentication and authorization  
 - Role-based access control for:
   - **Admin**
-  - **Clinic**
-  - **User**
+  - **Clinic_Owner**
+  - **Customer**
 - Token-based security for microservices communication
 
 ---
