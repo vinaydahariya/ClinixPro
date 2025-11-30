@@ -15,6 +15,16 @@ spring:
           # agar private repo hai:
           username: ${GITHUB_USERNAME}
           password: ${GITHUB_TOKEN}
+          search-paths:
+            - "gateway-server"
+            - "user-service"
+            - "clinic-service"
+            - "category-service"
+            - "booking-service"
+            - "payment-service"
+            - "notification-service"
+            - "review-service"
+            - "service-offering-service"
 
 eureka:
   client:
