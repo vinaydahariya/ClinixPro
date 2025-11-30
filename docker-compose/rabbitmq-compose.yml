@@ -1,0 +1,26 @@
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: vinay
+      RABBITMQ_DEFAULT_PASS: Vinay123@#$
+    volumes:
+      - /host_mnt/d/Program Files/rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+networks:
+  clinixpro:
+    external: true
+
+volumes:
+  rabbitmq_data:

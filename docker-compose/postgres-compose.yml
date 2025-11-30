@@ -1,0 +1,95 @@
+services:
+
+  postgres-clinic:
+    image: postgres:13
+    container_name: postgres-clinic
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Vinay123@#$
+      POSTGRES_DB: clinixpro_clinic_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - /host_mnt/d/Program Files/postgres-clinic-data:/var/lib/postgresql/data
+    networks:
+      - clinixpro
+
+  postgres-booking:
+    image: postgres:13
+    container_name: postgres-booking
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Vinay123@#$
+      POSTGRES_DB: clinixpro_booking_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - /host_mnt/d/Program Files/postgres-booking-data:/var/lib/postgresql/data
+    networks:
+      - clinixpro
+
+  postgres-payment:
+    image: postgres:13
+    container_name: postgres-payment
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Vinay123@#$
+      POSTGRES_DB: clinixpro_payment_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - /host_mnt/d/Program Files/postgres-payment-data:/var/lib/postgresql/data
+    networks:
+      - clinixpro
+
+  postgres-notification:
+    image: postgres:13
+    container_name: postgres-notification
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Vinay123@#$
+      POSTGRES_DB: clinixpro_notification_db
+    ports:
+      - "5436:5432"
+    volumes:
+      - /host_mnt/d/Program Files/postgres-notification-data:/var/lib/postgresql/data
+    networks:
+      - clinixpro
+
+  postgres-review:
+    image: postgres:13
+    container_name: postgres-review
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Vinay123@#$
+      POSTGRES_DB: clinixpro_review_db
+    ports:
+      - "5437:5432"
+    volumes:
+      - /host_mnt/d/Program Files/postgres-review-data:/var/lib/postgresql/data
+    networks:
+      - clinixpro
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "2020:80"
+    depends_on:
+      - postgres-clinic
+    networks:
+      - clinixpro
+
+networks:
+  clinixpro:
+    external: true
+
+volumes:
+  postgres-clinic-data:
+  postgres-booking-data:
+  postgres-payment-data:
+  postgres-notification-data:
+  postgres-review-data:
