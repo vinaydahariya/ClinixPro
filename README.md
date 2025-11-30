@@ -48,6 +48,25 @@ Upcoming planned features include:
 
 ---
 
+## Service-wise Responsibilities in ClinixPro
+
+| Service                      | CircuitBreaker / Retry / RateLimiter             | Automatic Refresh (Spring Cloud Bus) | RabbitMQ Needed?                          | Notes                                          |
+| ---------------------------- | ------------------------------------------------ | ------------------------------------ | ----------------------------------------- | ---------------------------------------------- |
+| **Booking-Service**          | ✔ Yes                                            | ✔ Yes                                | ✔ For async notifications                 | Calls Payment-Service → needs resilience       |
+| **Payment-Service**          | ✔ Yes (if calling Notification-Service)         | ✔ Yes                                | ✔ For async notifications                 | Handles payment → sends notification           |
+| **Notification-Service**     | ❌ Not needed                                    | ✔ Yes                                | ✔ For consuming notifications & Cloud Bus | Only consumes events, no outgoing calls        |
+| **Clinic-Service**           | ✔ Optional (if calling other services)          | ✔ Yes                                | ❌                                         | Usually CRUD only, resilience optional         |
+| **Category-Service**         | ✔ Optional (if calling Service-Offering-Service)| ✔ Yes                                | ❌                                         | Optional, only if it calls other microservices |
+| **Service-Offering-Service** | ❌ Not needed                                    | ✔ Yes                                | ❌                                         | CRUD service, no external calls                |
+| **Review-Service**           | ❌ Not needed                                    | ✔ Yes                                | ❌                                         | Only stores/reads reviews                      |
+| **User-Service**             | ❌ Not needed                                    | ✔ Yes                                | ❌                                         | Keycloak handles auth, no outgoing calls       |
+| **Gateway-Service**          | ✔ Optional RateLimiter at entry point           | ✔ Yes                                | ❌                                         | Can limit API traffic globally                 |
+| **Eureka-Server**            | ❌ Not needed                                    | ❌ Not needed                         | ❌                                         | Only service registry                          |
+| **Config-Server**            | ❌ Not needed                                    | ✔ Yes                                | ✔ RabbitMQ for bus events                 | Central config broadcaster                     |
+
+
+---
+
 ## 🔑 Authentication & Security
 
 - **Keycloak** for centralized authentication and authorization  
