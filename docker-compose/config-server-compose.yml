@@ -12,8 +12,8 @@ services:
       SPRING_CONFIG_SERVER_GIT_SEARCH_PATHS: "gateway-server,user-service,clinic-service,category-service,booking-service,payment-service,notification-service,review-service,service-offering-service"
       
       # 🔹 Optional: Private repo credentials
-      SPRING_CONFIG_SERVER_GIT_USERNAME: vinaydahariya
-      SPRING_CONFIG_SERVER_GIT_PASSWORD: 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
+      SPRING_CONFIG_SERVER_GIT_USERNAME: ${GITHUBUSERNAME}
+      SPRING_CONFIG_SERVER_GIT_PASSWORD: ${GITHUBACESSTOKEN}
 
       # 🔹 RabbitMQ
       SPRING_RABBITMQ_HOST: rabbitmq
@@ -41,3 +41,4 @@ services:
 networks:
   clinixpro:
     external: true
+
