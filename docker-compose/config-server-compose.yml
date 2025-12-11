@@ -1,0 +1,43 @@
+services:
+  config-server:
+    image: dahariyavinay/config-server:v1
+    container_name: config-server
+
+    environment:
+      # 🔹 Git repo configuration
+      SPRING_CONFIG_SERVER_GIT_URI: https://github.com/vinaydahariya/clinixpro-config
+      SPRING_CONFIG_SERVER_GIT_DEFAULT_LABEL: main
+      SPRING_CONFIG_SERVER_GIT_CLONE_ON_START: "true"
+      SPRING_CONFIG_SERVER_GIT_FORCE_PULL: "true"
+      SPRING_CONFIG_SERVER_GIT_SEARCH_PATHS: "gateway-server,user-service,clinic-service,category-service,booking-service,payment-service,notification-service,review-service,service-offering-service"
+      
+      # 🔹 Optional: Private repo credentials
+      SPRING_CONFIG_SERVER_GIT_USERNAME: vinaydahariya
+      SPRING_CONFIG_SERVER_GIT_PASSWORD: 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
+
+      # 🔹 RabbitMQ
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: vinay
+      SPRING_RABBITMQ_PASSWORD: Vinay123@#$
+
+      # 🔹 Eureka
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+
+      # 🔹 Management endpoints exposure
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,env,refresh,bus-refresh"
+
+    ports:
+      - "1019:1019"
+
+    networks:
+      - clinixpro
+
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+networks:
+  clinixpro:
+    external: true

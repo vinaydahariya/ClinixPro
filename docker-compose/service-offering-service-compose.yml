@@ -1,0 +1,20 @@
+services:
+  service-offering-service:
+    image: dahariyavinay/service-offering-service:v1
+    container_name: service-offering-service
+
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:1019
+      SPRING_PROFILES_ACTIVE: docker
+
+    networks:
+      - clinixpro
+
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+networks:
+  clinixpro:
+    external: true

@@ -1,0 +1,19 @@
+services:
+  eureka-server:
+    image: dahariyavinay/eureka-server:v1
+    container_name: eureka-server
+    
+    ports:
+      - "8761:8761"
+
+    networks:
+      - clinixpro
+
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+networks:
+  clinixpro:
+    external: true

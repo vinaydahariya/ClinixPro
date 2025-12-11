@@ -1,0 +1,20 @@
+services:
+  category-service:
+    image: dahariyavinay/category-service:v1
+    container_name: category-service
+
+    environment:
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:1019
+      SPRING_PROFILES_ACTIVE: docker
+
+    networks:
+      - clinixpro
+
+    deploy:
+      resources:
+        limits:
+          memory: 600m
+
+networks:
+  clinixpro:
+    external: true

@@ -1,0 +1,17 @@
+services:
+  frontend:
+    image: dahariyavinay/frontend:v1
+    container_name: frontend
+   
+    ports:
+      - "3000:80"       # host 3000 → container 80 (nginx)
+    networks:
+      - clinixpro
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+
+networks:
+  clinixpro:
+    external: true
